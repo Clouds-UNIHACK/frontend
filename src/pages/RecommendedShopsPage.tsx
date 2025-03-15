@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Grid, Paper, Button, Chip, Container, Card, CardMedia, CardContent, Fade, useMediaQuery, Divider } from "@mui/material";
+import { Box, Typography, Grid, Paper, Button, Chip, Container, Card, CardMedia, CardContent, Fade, useMediaQuery, Divider, Alert } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -7,61 +7,37 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
-// Sample clothing items data
-const SIMILAR_CLOTHES = [
+// Define the recommended shop props
+export interface RecommendedShopProps {
+  image_url: string | null;
+  link: string | null;
+  shop: string | null;
+  title: string | null;
+  price: number | null;
+}
+
+// Sample data to use as fallback when API data is missing
+const SAMPLE_RECOMMENDATIONS: RecommendedShopProps[] = [
   {
-    id: 1,
-    name: "Classic White Shirt",
-    price: "$49.99",
+    image_url: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+    link: "https://example.com/shop1",
     shop: "Fashion Forward",
-    shopUrl: "https://example.com/shop1",
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
-    tags: ["Shirts", "Classic", "Formal"]
+    title: "Classic White Shirt",
+    price: 49.99
   },
   {
-    id: 2,
-    name: "Slim Fit Blue Jeans",
-    price: "$59.99",
+    image_url: "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+    link: "https://example.com/shop2",
     shop: "Urban Styles",
-    shopUrl: "https://example.com/shop2",
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
-    tags: ["Jeans", "Casual", "Everyday"]
+    title: "Slim Fit Blue Jeans",
+    price: 59.99
   },
   {
-    id: 3,
-    name: "Summer Floral Dress",
-    price: "$79.99",
+    image_url: "https://images.unsplash.com/photo-1612336307429-8a898d10e223?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+    link: "https://example.com/shop3",
     shop: "Boutique Elegance",
-    shopUrl: "https://example.com/shop3",
-    image: "https://images.unsplash.com/photo-1612336307429-8a898d10e223?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
-    tags: ["Dress", "Summer", "Floral"]
-  },
-  {
-    id: 4,
-    name: "Casual Cotton Sweater",
-    price: "$45.99",
-    shop: "Eco Wardrobe",
-    shopUrl: "https://example.com/shop4",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
-    tags: ["Sustainable", "Sweater", "Casual"]
-  },
-  {
-    id: 5,
-    name: "Retro Denim Jacket",
-    price: "$89.99",
-    shop: "Vintage Treasures",
-    shopUrl: "https://example.com/shop5",
-    image: "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
-    tags: ["Jacket", "Retro", "Denim"]
-  },
-  {
-    id: 6,
-    name: "Black Leather Boots",
-    price: "$129.99",
-    shop: "Urban Styles",
-    shopUrl: "https://example.com/shop2",
-    image: "https://images.unsplash.com/photo-1608256246200-55f0b8109cce?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
-    tags: ["Shoes", "Leather", "Winter"]
+    title: "Summer Floral Dress",
+    price: 79.99
   }
 ];
 
@@ -77,10 +53,55 @@ export const RecommendedShopsPage: React.FC = () => {
   // Get the liked image from location state or use a default
   const likedImage = location.state?.likedImage || "";
   
+  // State for recommendations and errors
+  const [recommendations, setRecommendations] = useState<RecommendedShopProps[]>([]);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  
   useEffect(() => {
+    try {
+      // Try to get recommendations from state, fall back to sample data if needed
+      let recs = [];
+      
+      // Log the incoming data for debugging
+      console.log("Location state:", location.state);
+      
+      if (location.state?.recommendations?.shop_recommendations) {
+        console.log("Using shop_recommendations from API");
+        recs = location.state.recommendations.shop_recommendations;
+      } else if (Array.isArray(location.state?.recommendations)) {
+        console.log("Using recommendations array directly");
+        recs = location.state.recommendations;
+      } else {
+        console.log("Using sample recommendations - no valid data from API");
+        recs = SAMPLE_RECOMMENDATIONS;
+      }
+      
+      // Additional safety - ensure all items have the expected shape
+      recs = recs.map((item: any) => ({
+        image_url: item.image_url || null,
+        link: item.link || null,
+        shop: item.shop || null,
+        title: item.title || null,
+        price: item.price || null
+      }));
+      
+      console.log("Processed recommendations:", recs);
+      setRecommendations(recs);
+      
+      // Reset any previous errors
+      setHasError(false);
+      setErrorMessage("");
+    } catch (error) {
+      console.error("Error processing recommendations:", error);
+      setHasError(true);
+      setErrorMessage(error instanceof Error ? error.message : "Unknown error processing recommendations");
+      setRecommendations(SAMPLE_RECOMMENDATIONS);
+    }
+    
     // Scroll to top when page loads
     window.scrollTo(0, 0);
-  }, []);
+  }, [location.state]);
 
   const handleBackClick = () => {
     navigate("/swapping");
@@ -102,6 +123,17 @@ export const RecommendedShopsPage: React.FC = () => {
           Back to Try-On
         </Button>
       </Box>
+
+      {/* Error message if applicable */}
+      {hasError && (
+        <Alert 
+          severity="warning" 
+          sx={{ mb: 3 }}
+          onClose={() => setHasError(false)}
+        >
+          {errorMessage || "There was an error loading recommendations. Showing sample items instead."}
+        </Alert>
+      )}
 
       {/* Top section with liked image */}
       <Box sx={{ mb: 5 }}>
@@ -176,72 +208,74 @@ export const RecommendedShopsPage: React.FC = () => {
       
       <Divider sx={{ mb: 4 }} />
 
-      {/* Similar clothes section */}
+      {/* Recommendations section */}
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
         Similar Clothes You'll Love
       </Typography>
 
       <Grid container spacing={3}>
-        {SIMILAR_CLOTHES.map((item) => (
-          <Grid item xs={12} sm={6} md={4} key={item.id}>
+        {recommendations.map((item, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
             <Card
-              elevation={hoveredItem === item.id ? 4 : 1}
-              onMouseEnter={() => setHoveredItem(item.id)}
+              elevation={hoveredItem === index ? 4 : 1}
+              onMouseEnter={() => setHoveredItem(index)}
               onMouseLeave={() => setHoveredItem(null)}
               sx={{
                 borderRadius: '12px',
                 overflow: 'hidden',
                 transition: 'all 0.3s ease',
-                transform: hoveredItem === item.id ? 'translateY(-8px)' : 'none',
+                transform: hoveredItem === index ? 'translateY(-8px)' : 'none',
                 height: '100%',
                 position: 'relative',
                 cursor: 'pointer',
               }}
-              onClick={() => window.open(item.shopUrl, '_blank')}
+              onClick={() => item.link && window.open(item.link, '_blank')}
             >
               <CardMedia
                 component="img"
                 height="220"
-                image={item.image}
-                alt={item.name}
+                image={item.image_url || "https://via.placeholder.com/400x300?text=No+Image"}
+                alt={item.title || "Product"}
               />
               
               <CardContent sx={{ pb: isMobile ? 1 : 2 }}>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                  {item.name}
+                  {item.title || "Unknown Product"}
                 </Typography>
                 
                 <Typography variant="subtitle1" sx={{ mb: 1, color: '#E91E63', fontWeight: 'bold' }}>
-                  {item.price}
+                  {(() => {
+                    // Handle different price formats safely
+                    if (item.price === null || item.price === undefined) {
+                      return "Price unavailable";
+                    }
+                    
+                    // If price is already a number
+                    if (typeof item.price === 'number') {
+                      return `$${item.price.toFixed(2)}`;
+                    }
+                    
+                    // If price is a string that can be converted to a number
+                    const numPrice = Number(item.price);
+                    if (!isNaN(numPrice)) {
+                      return `$${numPrice.toFixed(2)}`;
+                    }
+                    
+                    // If it's a string but not convertible to number, just return it as is
+                    return typeof item.price === 'string' ? item.price : "Price unavailable";
+                  })()}
                 </Typography>
                 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    from <b>{item.shop}</b>
+                    from <b>{item.shop || "Unknown Shop"}</b>
                   </Typography>
-                </Box>
-                
-                <Box sx={{ display: 'flex', gap: 0.5, mt: 1, flexWrap: 'wrap' }}>
-                  {item.tags.map((tag, index) => (
-                    <Chip 
-                      key={index} 
-                      label={tag} 
-                      size="small" 
-                      sx={{ 
-                        backgroundColor: 'rgba(57, 255, 20, 0.1)',
-                        color: '#090',
-                        fontWeight: 'medium',
-                        fontSize: '0.7rem',
-                        height: '22px'
-                      }} 
-                    />
-                  ))}
                 </Box>
               </CardContent>
               
               {/* Hover overlay - only shown on non-mobile devices */}
               {!isMobile && (
-                <Fade in={hoveredItem === item.id}>
+                <Fade in={hoveredItem === index}>
                   <Box
                     sx={{
                       position: 'absolute',

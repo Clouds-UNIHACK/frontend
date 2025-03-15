@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, Typography, Box, IconButton, Dialog, DialogTitle, DialogContent, Button, Fade } from "@mui/material";
+import { Paper, Typography, Box, IconButton, Dialog, DialogTitle, DialogContent, Button, Fade, CircularProgress } from "@mui/material";
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -22,57 +22,60 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLoveClick = () => {
     setIsDialogOpen(true);
   };
 
-  const handleConfirmLove = () => {
-    // Here you would typically send data to your backend about the loved item
-    console.log("User loved the item, redirecting to shop recommendations");
-    setIsDialogOpen(false);
-    const sendLikedImageToBackendToGetShopRecommendations = async () => {
-      // First request: Get shop recommendations
+  const handleConfirmLove = async () => {
+    // Set loading state but DON'T close the dialog yet
+    setIsLoading(true);
+
+    try {
+      // Convert image data URL to blob
+      let imageBlob: Blob;
+      
+      if (image.startsWith('data:')) {
+        // Convert data URL to Blob
+        const response = await fetch(image);
+        imageBlob = await response.blob();
+      } else {
+        // If it's already a URL to an image, fetch it first
+        const response = await fetch(image);
+        imageBlob = await response.blob();
+      }
+
+      // Create a FormData object
+      const formData = new FormData();
+      formData.append('image', imageBlob, 'image.png');
+      
       const response = await fetch('http://localhost:8000/api/ai-recommend-shops', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image }),
+        body: formData,
       });
-    
+
       if (!response.ok) {
-        throw new Error('Failed to get shop recommendations from the backend');
+        const errorText = await response.text();
+        console.error(`Error ${response.status}: ${errorText}`);
+        throw new Error(`Failed to get shop recommendations: ${response.status} ${response.statusText}`);
       }
-    
+
       const recommendations = await response.json();
       console.log('Shop recommendations:', recommendations);
-    
-      // // Directly using your backend URL for the second request
-      // try {
-      //   const response = await fetch('http://localhost:8000/liked-image', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({ image }),
-      //   });
-    
-      //   if (!response.ok) {
-      //     throw new Error('Failed to send liked image to the backend');
-      //   }
-    
-      //   console.log('Liked image successfully sent to the backend');
-      // } catch (error) {
-      //   console.error('Error sending liked image to the backend:', error);
-      // }
-    };
-    
-
-    sendLikedImageToBackendToGetShopRecommendations();
-    // Navigate to the recommendation shops page and pass the current image
-    navigate("/rec-shops", { state: { likedImage: image } });
+      
+      // Only close the dialog after successful API call
+      setIsDialogOpen(false);
+      
+      // Navigate to recommendations page with both the image and recommendations
+      navigate("/rec-shops", { state: { likedImage: image, recommendations: recommendations } });
+    } catch (error) {
+      console.error('Error fetching shop recommendations:', error);
+      // Keep the dialog open to show error (you could add error state handling here)
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancelLove = () => {
@@ -235,9 +238,18 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
           Love this style?
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1">
-            We'll show you the 5 best shops where you can find similar items. Would you like to see them?
-          </Typography>
+          {isLoading ? (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, py: 2 }}>
+              <CircularProgress size={50} sx={{ color: '#E91E63' }} />
+              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                Finding the best shops for this style...
+              </Typography>
+            </Box>
+          ) : (
+            <Typography variant="body1">
+              We'll show you the 5 best shops where you can find similar items. Would you like to see them?
+            </Typography>
+          )}
         </DialogContent>
         <Box
           sx={{
@@ -255,19 +267,21 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
               '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.8)' },
               marginRight: 1,
             }}
+            disabled={isLoading}
           >
             Maybe Later
           </Button>
           <Button
             onClick={handleConfirmLove}
             variant="contained"
-            startIcon={<FavoriteIcon />}
+            startIcon={!isLoading && <FavoriteIcon />}
             sx={{
               backgroundColor: '#E91E63',
               '&:hover': { backgroundColor: '#C2185B' },
             }}
+            disabled={isLoading}
           >
-            Show Me Shops
+            {isLoading ? <CircularProgress size={24} color="inherit" /> : "Show Me Shops"}
           </Button>
         </Box>
       </Dialog>
