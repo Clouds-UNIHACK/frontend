@@ -35,6 +35,10 @@ export const LoginPage = () => {
         },
       });
       console.log(response);
+      if (response?.data) {
+        localStorage.setItem("accessToken", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -52,9 +56,8 @@ export const LoginPage = () => {
       });
       console.log(response);
 
-      if (response) {
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+      if (response?.access_token) {
+        localStorage.setItem("accessToken", response.access_token);
       }
     } catch (error) {
       console.error(error);

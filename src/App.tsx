@@ -7,6 +7,7 @@ import { SwappingPage } from "./pages/SwappingPage";
 import { WhoWeArePage } from "./pages/WhoWeArePage";
 import { MyProfilePage } from "./pages/MyProfilePage";
 import { RecommendedShopsPage } from "./pages/RecommendedShopsPage";
+import GalleryPage from "./pages/GalleryPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/whoweare" element={<WhoWeArePage />} />
           <Route path="/myprofile" element={<MyProfilePage />} />
           <Route path="/rec-shops" element={<RecommendedShopsPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route path="*" element={<HomePage />} /> {/* 404 Page */}
         </Routes>
       </Router>

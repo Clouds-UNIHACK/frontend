@@ -11,6 +11,7 @@ interface MainFeatureStore {
 
   currentPoseIndex: number;
   currentItemIndex: number;
+  currentResultIndex: number;
 
   // Actions for toggling the booleans
   toggleMultiplePoses: () => void;
@@ -147,7 +148,7 @@ export const useMainFeatureStore = create<MainFeatureStore>((set) => ({
     set((state) => {
       return {
         generatedResults: [...state.generatedResults, result],
-        currentResultIndex: state.generatedResults.length - 1,
+        currentResultIndex: state.generatedResults.length,
       };
     }),
 

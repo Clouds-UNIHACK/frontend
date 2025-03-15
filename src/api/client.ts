@@ -34,6 +34,7 @@ export interface InternalResponse {
   image_url?: string;
   success?: boolean;
   data?: any;
+  access_token?: string;
 }
 
 export type RouteLike = `${string}`;
@@ -138,7 +139,8 @@ export class RestClient {
     config.headers = options.headers || Object.create(null);
     console.log(config.headers);
     const token = localStorage.getItem("accessToken") || "";
-    if (token) config.headers!["Authorization"] = token;
+    if (token) config.headers!["Authorization"] = "Bearer " + token;
+    console.log(token);
     config.headers!["Access-Control-Allow-Origin"] = "*";
 
     config.withCredentials = true;

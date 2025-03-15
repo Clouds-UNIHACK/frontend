@@ -14,8 +14,8 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
-import { GenerateButton } from "./GenerateButton";
 import { useMainFeatureStore } from "../../stores/mainFeatureStore";
+import GenerateActionBar from "./GenerateActionBar";
 interface ResultSectionProps {
   image: string;
   resultIndex?: number;
@@ -88,7 +88,7 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
             }}
           />
         )}
-        {!generatedResults && (
+        {!generatedResults?.length && (
           <Typography color="textSecondary" sx={{ px: 4, textAlign: "center" }}>
             Upload base and item images, then click Generate to see the
             AI-swapped results
@@ -201,8 +201,8 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
             </Box>
           </Fade>
         )}
-        <GenerateButton />
       </Paper>
+      <GenerateActionBar />
 
       {/* Love confirmation dialog */}
       <Dialog
