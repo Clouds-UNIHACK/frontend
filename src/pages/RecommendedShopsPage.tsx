@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Grid, Paper, Button, Chip, Container, Card, CardMedia, CardContent, Fade, useMediaQuery, Divider } from "@mui/material";
-import { HeaderText } from "../components/HeaderText";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
