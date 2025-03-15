@@ -1,17 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { Paper, Typography, Stack, Button, IconButton, Box, Grid } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CloseIcon from '@mui/icons-material/Close';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import baseImage1 from "../../assets/images/samples/person1_img.png";
 import baseImage2 from "../../assets/images/samples/person2_img.png";
 import baseImage3 from "../../assets/images/samples/person3_img.png";
+import baseImage4 from "../../assets/images/samples/person4_img.png";
+import baseImage5 from "../../assets/images/samples/person5_img.png";
+import baseImage6 from "../../assets/images/samples/person6_img.png";
+import baseImage7 from "../../assets/images/samples/person7_img.png";
+import baseImage8 from "../../assets/images/samples/person8_img.png";
 
-// Sample base images (model photos)
+// Expanded sample base images (model photos)
 const SAMPLE_BASE_IMAGES = [
   baseImage1,
   baseImage2,
   baseImage3,
+  baseImage4,
+  baseImage5,
+  baseImage6,
+  baseImage7,
+  baseImage8,
 ];
 
 interface BaseImageCardProps {
@@ -29,6 +41,32 @@ export const BaseImageCard: React.FC<BaseImageCardProps> = ({
   onRemove,
   onSelectSample
 }) => {
+  // State to track which samples are currently visible
+  const [sampleStartIndex, setSampleStartIndex] = useState(0);
+  const VISIBLE_SAMPLES = 3;
+  
+  // Calculate the visible samples range
+  const visibleSamples = SAMPLE_BASE_IMAGES.slice(
+    sampleStartIndex, 
+    sampleStartIndex + VISIBLE_SAMPLES
+  );
+  
+  // Check if we can navigate up or down
+  const canNavigateUp = sampleStartIndex > 0;
+  const canNavigateDown = sampleStartIndex + VISIBLE_SAMPLES < SAMPLE_BASE_IMAGES.length;
+  
+  // Handle sample navigation
+  const handleSampleNavigation = (direction: 'up' | 'down') => {
+    if (direction === 'up' && canNavigateUp) {
+      setSampleStartIndex(prev => Math.max(0, prev - 1));
+    } else if (direction === 'down' && canNavigateDown) {
+      setSampleStartIndex(prev => Math.min(
+        SAMPLE_BASE_IMAGES.length - VISIBLE_SAMPLES, 
+        prev + 1
+      ));
+    }
+  };
+
   return (
     <Grid container spacing={1}>
       {/* Main image upload card */}
@@ -120,37 +158,94 @@ export const BaseImageCard: React.FC<BaseImageCardProps> = ({
         </Paper>
       </Grid>
 
-      {/* Samples section */}
+      {/* Simplified samples section */}
       <Grid item xs={3}>
         <Box sx={{ 
           height: '280px',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
-          gap: 1
+          position: 'relative'
         }}>
-          {SAMPLE_BASE_IMAGES.map((sampleUrl, index) => (
-            <Paper
-              key={index}
-              elevation={2}
-              onClick={() => onSelectSample(sampleUrl)}
-              sx={{
-                height: '80px',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                backgroundImage: `url(${sampleUrl})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                border: image === sampleUrl ? '2px solid #39FF14' : 'none',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                }
-              }}
-            />
-          ))}
+          {/* Sample thumbnails */}
+          <Box sx={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            height: '100%',
+            gap: 2,
+            position: 'relative',
+            py: 1
+          }}>
+            {visibleSamples.map((sampleUrl, index) => (
+              <Paper
+                key={sampleStartIndex + index}
+                elevation={2}
+                onClick={() => onSelectSample(sampleUrl)}
+                sx={{
+                  height: '80px',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  backgroundImage: `url(${sampleUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  border: image === sampleUrl ? '2px solid #39FF14' : 'none',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+                  }
+                }}
+              />
+            ))}
+            
+            {/* Fixed-position navigation buttons */}
+            {canNavigateUp && (
+              <IconButton 
+                size="small"
+                onClick={() => handleSampleNavigation('up')}
+                sx={{
+                  position: 'absolute',
+                  top: -12,
+                  right: 8,
+                  backgroundColor: 'rgba(0,0,0,0.3)',
+                  color: 'white',
+                  width: 20,
+                  height: 20,
+                  zIndex: 10,
+                  padding: 0,
+                  '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                  }
+                }}
+              >
+                <KeyboardArrowUpIcon fontSize="small" />
+              </IconButton>
+            )}
+            
+            {canNavigateDown && (
+              <IconButton 
+                size="small"
+                onClick={() => handleSampleNavigation('down')}
+                sx={{
+                  position: 'absolute',
+                  bottom: -12,
+                  right: 8,
+                  backgroundColor: 'rgba(0,0,0,0.3)',
+                  color: 'white',
+                  width: 20,
+                  height: 20,
+                  zIndex: 10,
+                  padding: 0,
+                  '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                  }
+                }}
+              >
+                <KeyboardArrowDownIcon fontSize="small" />
+              </IconButton>
+            )}
+          </Box>
         </Box>
       </Grid>
     </Grid>
