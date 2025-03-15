@@ -6,13 +6,19 @@ import { ImageUploadSection } from "../components/swapping/ImageUploadSection";
 import { ResultSection } from "../components/swapping/ResultSection";
 import { GenerateButton } from "../components/swapping/GenerateButton";
 import { CameraModal } from "../components/swapping/CameraModal";
+import SampleGeneratedImage1 from "../assets/images/samples/sample_generated1_img.png";
+import SampleGeneratedImage2 from "../assets/images/samples/sample_generated2_img.png";
+import SampleGeneratedImage3 from "../assets/images/samples/sample_generated3_img.png";
 
 export const SwappingPage: React.FC = () => {
-  // State for uploaded images and generated image
+  // State for uploaded images
   const [baseImage, setBaseImage] = useState<string>("");
   const [itemImages, setItemImages] = useState<string[]>([]);
   const [activeItemIndex, setActiveItemIndex] = useState<number>(0);
-  const [generatedImage, setGeneratedImage] = useState<string>("");
+  
+  // State for generated results
+  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+  const [activeResultIndex, setActiveResultIndex] = useState<number>(0);
 
   // State and refs for camera modal
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -111,11 +117,37 @@ export const SwappingPage: React.FC = () => {
     }
   };
 
-  // Mock function for generating the swapped image
-  // TODO: Implement the actual image generation logic
+  // Generate results for each item image
   const handleGenerate = () => {
-    console.log("Generating image from uploaded images");
-    setGeneratedImage("https://via.placeholder.com/500x600?text=AI+Generated+Image");
+    console.log("Generating images from uploaded images");
+    
+    // Map each item image to a sample generated result
+    // In a real app, you would call your API for each combination of base + item
+    const sampleResults = [
+      SampleGeneratedImage1, 
+      SampleGeneratedImage2, 
+      SampleGeneratedImage3
+    ];
+    
+    // Generate results based on the number of item images
+    const results = itemImages.map((_, index) => {
+      // Use the corresponding sample image or fallback to the first one
+      return sampleResults[index % sampleResults.length];
+    });
+    
+    setGeneratedImages(results);
+    setActiveResultIndex(0); // Reset to show the first result
+  };
+
+  // Navigate between result images
+  const handleResultNavigation = (direction: "prev" | "next") => {
+    if (generatedImages.length <= 1) return;
+    
+    if (direction === "prev") {
+      setActiveResultIndex((prev) => (prev > 0 ? prev - 1 : generatedImages.length - 1));
+    } else {
+      setActiveResultIndex((prev) => (prev < generatedImages.length - 1 ? prev + 1 : 0));
+    }
   };
 
   // Handle sample image selection
@@ -170,7 +202,13 @@ export const SwappingPage: React.FC = () => {
 
         {/* Right Side - Result Section */}
         <Grid xs={12} md={5} item sx={{ width: '100%' }}>
-          <ResultSection image={generatedImage} />
+          <ResultSection 
+            image={generatedImages[activeResultIndex] || ""}
+            hasMultipleResults={generatedImages.length > 1}
+            resultIndex={activeResultIndex}
+            totalResults={generatedImages.length}
+            onNavigate={handleResultNavigation}
+          />
         </Grid>
       </Grid>
 
