@@ -61,8 +61,9 @@ const NavBar = () => {
                 },
                 textTransform: "none",
                 borderRadius: "8px",
-                padding: "8px 16px"
+                padding: "8px 16px",
               }}
+              onClick={() => window.location.href = '/login'}
             >
               <Typography variant="h6">
                 {item.title}

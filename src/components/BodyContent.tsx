@@ -66,6 +66,7 @@ export const BodyContent = () => {
                     boxShadow: '0 2px 4px rgba(57, 255, 20, 0.3)',
                   }
                 }}
+                onClick={() => window.location.href = '/swapping'}
               >
                 Try it now
               </Button>
