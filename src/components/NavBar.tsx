@@ -2,14 +2,16 @@ import { Box, Typography, Button } from "@mui/material";
 
 type NavItem = {
   title: string;
+  path: string;
 };
 
+
 const navItems: NavItem[] = [
-  { title: "Home" },
-  { title: "Swapping" },
-  { title: "Who we are" },
-  { title: "My profile" },
-  { title: "Log In/ Sign Up" }
+  { title: "Home", path: "/" },
+  { title: "Swapping", path: "/swapping" },
+  { title: "Who we are", path: "/whoweare" },
+  { title: "My profile", path: "/myprofile" },
+  { title: "Log In/ Sign Up", path: "/login" }
 ];
 
 const NavBar = () => {
@@ -70,7 +72,7 @@ const NavBar = () => {
               </Typography>
             </Button>
           ) : (
-            <Button key={item.title} variant="outlined">
+            <Button key={item.title} variant="outlined" onClick={() => window.location.href = item.path}>
               <Typography 
                 variant="body1" 
                 sx={{
