@@ -32,6 +32,45 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
     // Here you would typically send data to your backend about the loved item
     console.log("User loved the item, redirecting to shop recommendations");
     setIsDialogOpen(false);
+    const sendLikedImageToBackendToGetShopRecommendations = async () => {
+      // First request: Get shop recommendations
+      const response = await fetch('http://localhost:8000/api/ai-recommend-shops', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image }),
+      });
+    
+      if (!response.ok) {
+        throw new Error('Failed to get shop recommendations from the backend');
+      }
+    
+      const recommendations = await response.json();
+      console.log('Shop recommendations:', recommendations);
+    
+      // // Directly using your backend URL for the second request
+      // try {
+      //   const response = await fetch('http://localhost:8000/liked-image', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({ image }),
+      //   });
+    
+      //   if (!response.ok) {
+      //     throw new Error('Failed to send liked image to the backend');
+      //   }
+    
+      //   console.log('Liked image successfully sent to the backend');
+      // } catch (error) {
+      //   console.error('Error sending liked image to the backend:', error);
+      // }
+    };
+    
+
+    sendLikedImageToBackendToGetShopRecommendations();
     // Navigate to the recommendation shops page and pass the current image
     navigate("/rec-shops", { state: { likedImage: image } });
   };
