@@ -10,9 +10,6 @@ import baseImage2 from "../../assets/images/samples/person2_img.png";
 import baseImage3 from "../../assets/images/samples/person3_img.png";
 import baseImage4 from "../../assets/images/samples/person4_img.png";
 import baseImage5 from "../../assets/images/samples/person5_img.png";
-import baseImage6 from "../../assets/images/samples/person6_img.png";
-import baseImage7 from "../../assets/images/samples/person7_img.png";
-import baseImage8 from "../../assets/images/samples/person8_img.png";
 
 // Expanded sample base images (model photos)
 const SAMPLE_BASE_IMAGES = [
@@ -21,9 +18,6 @@ const SAMPLE_BASE_IMAGES = [
   baseImage3,
   baseImage4,
   baseImage5,
-  baseImage6,
-  baseImage7,
-  baseImage8,
 ];
 
 interface BaseImageCardProps {

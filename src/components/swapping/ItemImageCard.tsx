@@ -12,9 +12,6 @@ import itemImage2 from "../../assets/images/samples/item2_img.png";
 import itemImage3 from "../../assets/images/samples/item3_img.png";
 import itemImage4 from "../../assets/images/samples/item4_img.png";
 import itemImage5 from "../../assets/images/samples/item5_img.png";
-import itemImage6 from "../../assets/images/samples/item6_img.png";
-import itemImage7 from "../../assets/images/samples/item7_img.png";
-import itemImage8 from "../../assets/images/samples/item8_img.png";
 
 // Expanded sample clothing items
 const SAMPLE_ITEM_IMAGES = [
@@ -23,9 +20,6 @@ const SAMPLE_ITEM_IMAGES = [
   itemImage3,
   itemImage4,
   itemImage5,
-  itemImage6,
-  itemImage7,
-  itemImage8,
 ];
 
 interface ItemImageCardProps {
