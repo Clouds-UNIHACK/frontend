@@ -32,7 +32,9 @@ export const ItemImageCard: React.FC<ItemImageCardProps> = ({
     <Paper
       elevation={3}
       sx={{
-        height: 'calc((100% - 24px) / 2)',
+        height: '280px',
+        minHeight: '280px',
+        width: '100%',
         borderRadius: '12px',
         overflow: 'hidden',
         display: 'flex',
@@ -42,8 +44,10 @@ export const ItemImageCard: React.FC<ItemImageCardProps> = ({
         bgcolor: currentImage ? 'transparent' : '#f5f5f5',
         position: 'relative',
         backgroundImage: currentImage ? `url(${currentImage})` : 'none',
-        backgroundSize: 'cover',
+        backgroundSize: 'contain',
         backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        boxSizing: 'border-box',
       }}
     >
       {images.length > 0 ? (
@@ -156,6 +160,10 @@ export const ItemImageCard: React.FC<ItemImageCardProps> = ({
                   type="file"
                   hidden
                   accept="image/*"
+                  onClick={(event) => {
+                    // Reset the value to ensure onChange fires even if selecting the same file
+                    (event.target as HTMLInputElement).value = '';
+                  }}
                   onChange={onFileUpload}
                 />
               </Button>
@@ -196,6 +204,10 @@ export const ItemImageCard: React.FC<ItemImageCardProps> = ({
                 type="file"
                 hidden
                 accept="image/*"
+                onClick={(event) => {
+                  // Reset the value to ensure onChange fires even if selecting the same file
+                  (event.target as HTMLInputElement).value = '';
+                }}
                 onChange={onFileUpload}
               />
             </Button>

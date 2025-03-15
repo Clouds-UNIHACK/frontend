@@ -12,6 +12,7 @@ export const ResultSection: React.FC<ResultSectionProps> = ({ image }) => {
       sx={{
         width: '100%',
         height: '580px',
+        minHeight: '580px',
         borderRadius: '16px',
         overflow: 'hidden',
         display: 'flex',
@@ -22,6 +23,7 @@ export const ResultSection: React.FC<ResultSectionProps> = ({ image }) => {
         backgroundSize: 'contain',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        boxSizing: 'border-box',
       }}
     >
       {!image && (

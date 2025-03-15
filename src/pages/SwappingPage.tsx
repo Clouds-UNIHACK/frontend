@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 // Grid is marked as deprecated but still works - will address in future update
-import { Box, Grid } from "@mui/material";
+import { Grid, Container } from "@mui/material";
 import { HeaderText } from "../components/HeaderText";
 import { ImageUploadSection } from "../components/swapping/ImageUploadSection";
 import { ResultSection } from "../components/swapping/ResultSection";
@@ -112,18 +112,19 @@ export const SwappingPage: React.FC = () => {
   };
 
   // Mock function for generating the swapped image
+  // TODO: Implement the actual image generation logic
   const handleGenerate = () => {
     console.log("Generating image from uploaded images");
     setGeneratedImage("https://via.placeholder.com/500x600?text=AI+Generated+Image");
   };
 
   return (
-    <Box sx={{ padding: '0', maxWidth: '1280px', margin: '0 auto' }}>
+    <Container maxWidth="xl" sx={{ px: 2 }}>
       <HeaderText page="swapping" />
 
-      <Grid container spacing={4} sx={{ mt: 1, px: 4 }}>
+      <Grid container spacing={4} sx={{ mt: 1 }}>
         {/* Left Side - Upload Section */}
-        <Grid xs={12} md={5}>
+        <Grid xs={12} md={5} item sx={{ width: '100%' }}>
           <ImageUploadSection 
             baseImage={baseImage}
             itemImages={itemImages}
@@ -139,7 +140,13 @@ export const SwappingPage: React.FC = () => {
         <Grid 
           xs={12} 
           md={2} 
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          item
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            width: '100%'
+          }}
         >
           <GenerateButton 
             onClick={handleGenerate} 
@@ -148,7 +155,7 @@ export const SwappingPage: React.FC = () => {
         </Grid>
 
         {/* Right Side - Result Section */}
-        <Grid xs={12} md={5}>
+        <Grid xs={12} md={5} item sx={{ width: '100%' }}>
           <ResultSection image={generatedImage} />
         </Grid>
       </Grid>
@@ -160,6 +167,6 @@ export const SwappingPage: React.FC = () => {
         onClose={handleCameraClose}
         onCapture={handleCapture}
       />
-    </Box>
+    </Container>
   );
 };

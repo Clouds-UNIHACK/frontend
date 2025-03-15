@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Typography, Stack, Button, Box, IconButton } from "@mui/material";
+import { Paper, Typography, Stack, Button, IconButton } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,7 +21,9 @@ export const BaseImageCard: React.FC<BaseImageCardProps> = ({
     <Paper
       elevation={3}
       sx={{
-        height: 'calc((100% - 24px) / 2)',
+        height: '280px',
+        minHeight: '280px',
+        width: '100%',
         borderRadius: '12px',
         overflow: 'hidden',
         display: 'flex',
@@ -31,8 +33,10 @@ export const BaseImageCard: React.FC<BaseImageCardProps> = ({
         bgcolor: image ? 'transparent' : '#f5f5f5',
         position: 'relative',
         backgroundImage: image ? `url(${image})` : 'none',
-        backgroundSize: 'cover',
+        backgroundSize: 'contain',
         backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        boxSizing: 'border-box',
       }}
     >
       {image ? (
@@ -77,6 +81,9 @@ export const BaseImageCard: React.FC<BaseImageCardProps> = ({
                 type="file"
                 hidden
                 accept="image/*"
+                onClick={(event) => {
+                  (event.target as HTMLInputElement).value = '';
+                }}
                 onChange={onFileUpload}
               />
             </Button>
