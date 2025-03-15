@@ -118,6 +118,19 @@ export const SwappingPage: React.FC = () => {
     setGeneratedImage("https://via.placeholder.com/500x600?text=AI+Generated+Image");
   };
 
+  // Handle sample image selection
+  const handleSelectSample = (imageUrl: string, target: "base" | "item") => {
+    if (target === "base") {
+      setBaseImage(imageUrl);
+    } else if (target === "item" && itemImages.length < 3) {
+      // Check if this item is already in the array
+      if (!itemImages.includes(imageUrl)) {
+        setItemImages([...itemImages, imageUrl]);
+        setActiveItemIndex(itemImages.length);
+      }
+    }
+  };
+
   return (
     <Container maxWidth="xl" sx={{ px: 2 }}>
       <HeaderText page="swapping" />
@@ -133,6 +146,7 @@ export const SwappingPage: React.FC = () => {
             onCameraOpen={handleCameraOpen}
             onRemoveImage={handleRemoveImage}
             onItemNavigation={handleItemNavigation}
+            onSelectSample={handleSelectSample}
           />
         </Grid>
 

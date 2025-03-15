@@ -11,6 +11,7 @@ interface ImageUploadSectionProps {
   onCameraOpen: (target: "base" | "item") => void;
   onRemoveImage: (target: "base" | "item", index?: number) => void;
   onItemNavigation: (direction: "prev" | "next") => void;
+  onSelectSample: (imageUrl: string, target: "base" | "item") => void;
 }
 
 export const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
@@ -20,7 +21,8 @@ export const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
   onFileUpload,
   onCameraOpen,
   onRemoveImage,
-  onItemNavigation
+  onItemNavigation,
+  onSelectSample
 }) => {
   return (
     <Box sx={{ 
@@ -43,6 +45,7 @@ export const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
           onFileUpload={(e) => onFileUpload(e, "base")}
           onCameraOpen={() => onCameraOpen("base")}
           onRemove={() => onRemoveImage("base")}
+          onSelectSample={(url) => onSelectSample(url, "base")}
         />
         
         {/* Item Image Card */}
@@ -53,6 +56,7 @@ export const ImageUploadSection: React.FC<ImageUploadSectionProps> = ({
           onCameraOpen={() => onCameraOpen("item")}
           onRemove={(index: number) => onRemoveImage("item", index)}
           onNavigate={onItemNavigation}
+          onSelectSample={(url) => onSelectSample(url, "item")}
         />
       </Stack>
     </Box>
