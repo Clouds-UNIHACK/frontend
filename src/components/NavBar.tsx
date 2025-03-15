@@ -6,8 +6,10 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { title: "Home" },
-  { title: "About" },
-  { title: "Login" },
+  { title: "Swapping" },
+  { title: "Who we are" },
+  { title: "My profile" },
+  { title: "Log In/ Sign Up" }
 ];
 
 const NavBar = () => {
@@ -25,7 +27,19 @@ const NavBar = () => {
         color: "black",
       }}
     >
-      <Typography variant="h3">Swapp</Typography>
+      {/* Logo */}
+      <Typography
+        variant="h3"
+        sx={{
+          color: "red",
+          fontFamily: "'Montserrat', sans-serif",
+          fontWeight: "bold"
+        }}
+      >
+        Swapp
+
+      </Typography>
+      {/* Navigation items */}
       <Box
         sx={{
           position: "relative",
@@ -36,11 +50,36 @@ const NavBar = () => {
         }}
       >
         {navItems.map((item) => (
-          <Button variant="outlined">
-            <Typography variant="h6" key={item.title}>
-              {item.title}
-            </Typography>
-          </Button>
+          item.title === "Log In/ Sign Up" ? (
+            <Button
+              key={item.title}
+              variant="contained"
+              sx={{
+                backgroundColor: "green",
+                '&:hover': {
+                  backgroundColor: "darkgreen",
+                },
+                textTransform: "none",
+                borderRadius: "8px",
+                padding: "8px 16px"
+              }}
+            >
+              <Typography variant="h6">
+                {item.title}
+              </Typography>
+            </Button>
+          ) : (
+            <Button key={item.title} variant="outlined">
+              <Typography 
+                variant="body1" 
+                sx={{
+                  fontWeight: "normal"
+                }}
+              >
+                {item.title}
+              </Typography>
+            </Button>
+          )
         ))}
       </Box>
     </Box>
