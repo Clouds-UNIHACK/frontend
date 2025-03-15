@@ -71,27 +71,26 @@ export const HeaderText = (props: { page?: string }) => {
     <Box
       sx={{
         display: 'flex',
-        justifyContent: 'flex-start', // Align to the left
-        alignItems: 'flex-start',
-        padding: '24px 24px 0px',
-        minHeight: '12vh',
-        width: '50%' // Occupy the left half
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        padding: '8px 12px',
+        minHeight: 'auto',
+        height: 'auto',
+        marginBottom: '16px'
       }}
     >
       <Typography
-        variant="h1"
-        align="center"
+        variant="h4"
+        align="left"
         sx={{
           fontFamily: "'Orbitron', sans-serif",
-          fontWeight: 700,
+          fontWeight: 500,
           fontStyle: 'italic',
-          fontSize: { xs: '2rem', md: '3rem', lg: '3.8rem' },
+          fontSize: { xs: '1.2rem', md: '1.6rem', lg: '2rem' },
           letterSpacing: '0.02em',
           textTransform: 'uppercase',
-          lineHeight: 1.2,
-          marginBottom: '10px',
+          lineHeight: 1,
           color: '#90EE90', // Light green color
-          maxWidth: '90%'
         }}
       >
         AI SWAPPING
