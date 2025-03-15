@@ -21,7 +21,7 @@ const theme = createTheme({
           },
         },
         outlined: {
-          backgroundColor: "#fff",
+          backgroundColor: "rgba(0, 0, 0, 0)", // Transparent background for outlined variant
           border: "0px",
           color: "#000", // Custom text color for outlined variant
           "&:hover": {
