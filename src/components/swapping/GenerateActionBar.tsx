@@ -5,6 +5,7 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { GenerateButton } from "./GenerateButton";
 import { useMainFeatureStore } from "../../stores/mainFeatureStore";
 import restClient from "../../api/client";
+import axios from "../../api/axios";
 
 const GenerateActionBar = () => {
   const { generatedResults, currentResultIndex } = useMainFeatureStore();
@@ -18,21 +19,22 @@ const GenerateActionBar = () => {
     }
 
     const image = generatedResults[currentResultIndex];
+    console.log(`Bearer ${localStorage.getItem("accessToken")}`);
 
     try {
-      const response = await restClient.post("/api/v1/save-image", {
-        data: {
-          data_request: {
-            kling_url: image,
+      const response = await axios.post(
+        "/api/v1/save-image",
+        {
+          kling_url: generatedResults[currentResultIndex],
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
           },
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        config: {
           withCredentials: true,
-        },
-      });
+        }
+      );
       console.log(response);
       alert("Image saved successfully");
     } catch (error) {

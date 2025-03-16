@@ -42,8 +42,8 @@ export type RouteLike = `${string}`;
 export class RestClient {
   private readonly axiosInstance: AxiosInstance;
 
-  public constructor(axios: AxiosInstance) {
-    this.axiosInstance = axios;
+  public constructor(instance: AxiosInstance) {
+    this.axiosInstance = instance;
   }
 
   /**
