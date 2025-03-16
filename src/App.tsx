@@ -11,9 +11,10 @@ import GalleryPage from "./pages/GalleryPage";
 
 function App() {
   return (
-    <Root>
-      <NavBar />
-      <Router>
+    <Router>
+      <Root>
+        <NavBar />
+
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/swapping" element={<SwappingPage />} />
@@ -24,8 +25,8 @@ function App() {
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="*" element={<HomePage />} /> {/* 404 Page */}
         </Routes>
-      </Router>
-    </Root>
+      </Root>
+    </Router>
   );
 }
 

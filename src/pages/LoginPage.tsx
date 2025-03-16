@@ -11,9 +11,14 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import restClient from "../api/client";
+import useUserStore from "../stores/userStore";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
+
+  const { setUser } = useUserStore();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -38,6 +43,8 @@ export const LoginPage = () => {
       if (response?.data) {
         localStorage.setItem("accessToken", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        setUser(formData.username);
+        navigate("/swapping");
       }
     } catch (error) {
       console.error(error);
@@ -58,6 +65,8 @@ export const LoginPage = () => {
 
       if (response?.access_token) {
         localStorage.setItem("accessToken", response.access_token);
+        setUser(formData.username);
+        navigate("/swapping");
       }
     } catch (error) {
       console.error(error);

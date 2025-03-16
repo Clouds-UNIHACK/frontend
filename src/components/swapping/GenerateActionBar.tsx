@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, keyframes } from "@mui/material";
 import React from "react";
 
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -6,7 +6,17 @@ import { GenerateButton } from "./GenerateButton";
 import { useMainFeatureStore } from "../../stores/mainFeatureStore";
 import restClient from "../../api/client";
 import axios from "../../api/axios";
-
+const gradientShift = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`;
 const GenerateActionBar = () => {
   const { generatedResults, currentResultIndex } = useMainFeatureStore();
 
@@ -55,7 +65,40 @@ const GenerateActionBar = () => {
       }}
     >
       <GenerateButton />
-      <Button onClick={saveImage} variant="contained" color="primary">
+      <Button
+        onClick={saveImage}
+        sx={{
+          py: 1.5,
+          px: 4,
+          fontSize: "1.1rem",
+          fontWeight: "bold",
+          borderRadius: "24px",
+          background:
+            "linear-gradient(90deg, #34a0a4 0%, #52b69a 50%, #34a0a4 100%)",
+          backgroundSize: "200% auto",
+          boxShadow:
+            "0 0 15px rgba(96, 235, 173, 0.85), 0 0 25px rgba(81, 217, 140, 0.85)",
+          color: "white",
+          textTransform: "none",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            transform: "translateY(-3px)",
+            boxShadow:
+              "0 0 20px rgba(96, 235, 173, 0.85), 0 0 25px rgba(81, 217, 140, 0.85)",
+            animation: `${gradientShift} 2s ease infinite`,
+          },
+          "&:active": {
+            transform: "translateY(-1px)",
+            boxShadow:
+              "0 0 15px rgba(96, 235, 173, 0.855), 0 0 25px rgba(81, 217, 140, 0.85)",
+          },
+          "&:disabled": {
+            background: "linear-gradient(90deg, #9E9E9E 0%, #757575 100%)",
+            boxShadow: "none",
+            animation: "none",
+          },
+        }}
+      >
         Save to Gallery
       </Button>
     </Box>

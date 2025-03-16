@@ -5,7 +5,7 @@ import { HeaderText } from "../components/HeaderText";
 const HomePage = () => {
   return (
     <Box>
-      <HeaderText page="home" />
+      <HeaderText />
       <BodyContent />
     </Box>
   );

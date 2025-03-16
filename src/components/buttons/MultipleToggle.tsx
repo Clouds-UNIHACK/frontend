@@ -13,7 +13,7 @@ const MultipleToggle = ({ isMultiple, onToggle }: MultipleToggleProps) => {
       variant="contained"
       component="label"
       sx={{
-        bgcolor: "#90EE90",
+        bgcolor: "rgba(0,0,0,0)",
         color: "#000",
         "&:hover": { bgcolor: "#7CCD7C" },
       }}

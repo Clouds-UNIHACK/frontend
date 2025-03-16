@@ -27,7 +27,12 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
   resultIndex = 0,
   totalResults = 0,
 }) => {
-  const { generatedResults } = useMainFeatureStore();
+  const {
+    generatedResults,
+    currentResultIndex,
+    increateCurrentResultIndex,
+    decreaseCurrentResultIndex,
+  } = useMainFeatureStore();
   const [isHovering, setIsHovering] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
@@ -57,6 +62,7 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         sx={{
+          marginTop: "44px",
           width: "100%",
           height: "580px",
           minHeight: "580px",
@@ -99,7 +105,7 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
         {generatedResults?.length > 0 && (
           <>
             <IconButton
-              onClick={() => {}}
+              onClick={() => decreaseCurrentResultIndex()}
               sx={{
                 position: "absolute",
                 left: 16,
@@ -118,7 +124,7 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
             {/* Right navigation */}
             <IconButton
               aria-label="next result"
-              onClick={() => {}}
+              onClick={() => increateCurrentResultIndex()}
               sx={{
                 position: "absolute",
                 right: 16,
@@ -149,7 +155,7 @@ export const ResultSection: React.FC<ResultSectionProps> = ({
                 fontWeight: "bold",
               }}
             >
-              Result {resultIndex + 1} of {totalResults}
+              Result {currentResultIndex + 1} of {generatedResults?.length}
             </Box>
           </>
         )}

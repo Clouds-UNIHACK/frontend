@@ -22,9 +22,10 @@ const MainUploadView = ({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        bgcolor: "#f5f5f5",
+        bgcolor: "#fcfcfc",
         position: "relative",
         boxSizing: "border-box",
+        border: "1px solid #202020",
         aspectRatio: "1/1",
       }}
     >

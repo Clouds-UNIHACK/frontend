@@ -1,18 +1,16 @@
-import { Box } from "@mui/material";
-import MultipleToggle from "./buttons/MultipleToggle";
 import { useMainFeatureStore } from "../stores/mainFeatureStore";
+import { useCameraModalStore } from "../stores/cameraModalStore";
+import { Box } from "@mui/material";
 import UploadFileButton from "./buttons/UploadFileButton";
 import TakePictureButton from "./buttons/TakePictureButton";
-import { useCameraModalStore } from "../stores/cameraModalStore";
 
-const ActionBar = () => {
-  const { multipleItems, toggleMultipleItems, addItemImage, addPrevItemImage } =
-    useMainFeatureStore();
+const PoseActionBar = () => {
+  const { addPoseImage, addPrevPoseImage } = useMainFeatureStore();
 
   const { openModal } = useCameraModalStore();
   const onUpload = (file: File) => {
-    addItemImage(file);
-    addPrevItemImage(file);
+    addPoseImage(file);
+    addPrevPoseImage(file);
   };
 
   return (
@@ -27,14 +25,10 @@ const ActionBar = () => {
         boxSizing: "border-box",
       }}
     >
-      <MultipleToggle
-        isMultiple={multipleItems}
-        onToggle={toggleMultipleItems}
-      />
       <UploadFileButton onUpload={onUpload} />
       <TakePictureButton onClick={() => openModal("item")} />
     </Box>
   );
 };
 
-export default ActionBar;
+export default PoseActionBar;

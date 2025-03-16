@@ -11,7 +11,7 @@ const TakePictureButton = ({ onClick }: TakePictureButtonProps) => {
       variant="contained"
       onClick={onClick}
       sx={{
-        bgcolor: "#90EE90",
+        bgcolor: "rgba(0,0,0,0)",
         color: "#000",
         "&:hover": { bgcolor: "#7CCD7C" },
       }}
