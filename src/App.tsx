@@ -16,14 +16,14 @@ function App() {
         <NavBar />
 
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/swapping" element={<SwappingPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<SwappingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/whoweare" element={<WhoWeArePage />} />
           <Route path="/myprofile" element={<MyProfilePage />} />
           <Route path="/rec-shops" element={<RecommendedShopsPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="*" element={<HomePage />} /> {/* 404 Page */}
+          <Route path="*" element={<SwappingPage />} /> {/* 404 Page */}
         </Routes>
       </Root>
     </Router>
