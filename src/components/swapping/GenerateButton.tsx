@@ -69,23 +69,23 @@ export const GenerateButton = () => {
         fontWeight: "bold",
         borderRadius: "24px",
         background:
-          "linear-gradient(90deg, #9C27B0 0%, #E91E63 50%, #9C27B0 100%)",
+          "linear-gradient(90deg, #34a0a4 0%, #52b69a 50%, #34a0a4 100%)",
         backgroundSize: "200% auto",
         boxShadow:
-          "0 0 15px rgba(156, 39, 176, 0.5), 0 0 25px rgba(233, 30, 99, 0.3)",
+          "0 0 15px rgba(96, 235, 173, 0.85), 0 0 25px rgba(81, 217, 140, 0.85)",
         color: "white",
         textTransform: "none",
         transition: "all 0.3s ease",
         "&:hover": {
           transform: "translateY(-3px)",
           boxShadow:
-            "0 0 20px rgba(156, 39, 176, 0.6), 0 0 30px rgba(233, 30, 99, 0.4)",
+            "0 0 20px rgba(96, 235, 173, 0.85), 0 0 25px rgba(81, 217, 140, 0.85)",
           animation: `${gradientShift} 2s ease infinite`,
         },
         "&:active": {
           transform: "translateY(-1px)",
           boxShadow:
-            "0 0 15px rgba(156, 39, 176, 0.5), 0 0 20px rgba(233, 30, 99, 0.3)",
+            "0 0 15px rgba(96, 235, 173, 0.855), 0 0 25px rgba(81, 217, 140, 0.85)",
         },
         "&:disabled": {
           background: "linear-gradient(90deg, #9E9E9E 0%, #757575 100%)",

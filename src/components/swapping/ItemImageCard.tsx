@@ -21,8 +21,6 @@ export const ItemImageCard = () => {
     decreaseCurrentItemIndex,
   } = useMainFeatureStore();
 
-  const { openModal } = useCameraModalStore();
-
   const onUpload = (file: File) => {
     addItemImage(file);
     addPrevItemImage(file);
@@ -30,8 +28,15 @@ export const ItemImageCard = () => {
 
   return (
     <Stack sx={{ width: "100%", maxWidth: "400px" }} spacing={2}>
+      <Typography
+        color="textSecondary"
+        sx={{ mb: 2, fontWeight: 800 }}
+        variant="h5"
+      >
+        2. Upload Item Image (Max 3)
+      </Typography>
       <MainUploadView imageFile={itemImages?.[currentItemIndex]}>
-        {itemImages?.length > 0 ? (
+        {itemImages?.length > 0 && (
           <>
             <Box sx={{ position: "absolute", top: 8, left: 8 }}>
               <CloseButton onClick={() => deleteItemImage()} />
@@ -96,34 +101,13 @@ export const ItemImageCard = () => {
                 </IconButton>
               </>
             )}
-
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 8,
-                right: 8,
-                display: "flex",
-                gap: 1,
-              }}
-            >
-              <UploadFileButton onUpload={onUpload} />
-              <TakePictureButton onClick={() => openModal("item")} />
-            </Box>
-          </>
-        ) : (
-          // Show upload controls when no images
-          <>
-            <Typography color="textSecondary" sx={{ mb: 2 }} variant="h5">
-              Upload Item Image (Max 3)
-            </Typography>
-            <Stack direction="row" spacing={2}>
-              <UploadFileButton onUpload={onUpload} />
-              <TakePictureButton onClick={() => openModal("item")} />
-            </Stack>
           </>
         )}
       </MainUploadView>
       <ActionBar />
+      <Typography color="textSecondary" variant="h6">
+        Your Collection
+      </Typography>
 
       <ItemCollectionView />
     </Stack>

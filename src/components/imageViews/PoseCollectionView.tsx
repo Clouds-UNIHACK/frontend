@@ -11,7 +11,8 @@ const PoseCollectionView = () => {
         position: "relative",
         width: "100%",
         aspectRatio: "1/1",
-        backgroundColor: "rgba(150,150,150,0.1)",
+        backgroundColor: "rgba(200,200,200,0.1)",
+        borderRadius: 4,
       }}
     >
       <Grid2 container spacing={2}>

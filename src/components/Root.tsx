@@ -7,10 +7,15 @@ const Root = ({ children }: { children: React.ReactNode }) => {
       sx={{
         position: "relative",
         width: "100%",
-        height: "100%",
+        height: "auto",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        bgcolor: "#fff8de",
+        background: "linear-gradient(180deg, #FFFFFF 0%, #DDF3FF 100%)",
+        overflow: "scroll",
+        boxSizing: "border-box",
       }}
     >
       {children}

@@ -1,6 +1,6 @@
-import { Box, Typography, Button } from "@mui/material";
-import getAccessToken from "../api/utils";
-import { useEffect } from "react";
+import { Box, Typography, Button, Avatar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import useUserStore from "../stores/userStore";
 
 type NavItem = {
   title: string;
@@ -11,17 +11,36 @@ const navItems: NavItem[] = [
   { title: "Home", path: "/" },
   { title: "Swapping", path: "/swapping" },
   { title: "Who we are", path: "/whoweare" },
-  { title: "My profile", path: "/myprofile" },
-  { title: "Log In/ Sign Up", path: "/login" },
+  { title: "Gallery", path: "/gallery" },
 ];
 
 const NavBar = () => {
-  useEffect(() => {
-    const accessToken = getAccessToken();
-    if (accessToken) {
-      navItems[navItems.length - 1] = { title: "Log Out", path: "/logout" };
+  const { user } = useUserStore();
+  const navigate = useNavigate();
+
+  function stringToColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
-  }, []);
+    return color;
+  }
+  function stringAvatar() {
+    const initials = () => {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      return `${letters[Math.floor(Math.random() * 26)]}${
+        letters[Math.floor(Math.random() * 26)]
+      }`;
+    };
+
+    return {
+      sx: {
+        bgcolor: stringToColor(),
+      },
+      children: initials(),
+    };
+  }
 
   return (
     <Box
@@ -33,8 +52,9 @@ const NavBar = () => {
         justifyContent: "space-between",
         width: "100%",
         height: "112px",
-        backgroundColor: "#9FFFCB",
+        backgroundColor: "rgba(0, 204, 255, 0.3)",
         color: "black",
+        boxShadow: "10px 1px 4px -1px gray",
       }}
     >
       <Box
@@ -47,23 +67,12 @@ const NavBar = () => {
           maxWidth: "1800px",
           paddingX: { xl: "200px", sm: "100px" },
           height: "112px",
-          backgroundColor: "#9FFFCB",
+          backgroundColor: "rgba(0, 204, 255, 0)",
           color: "black",
           boxSizing: "border-box",
         }}
       >
-        {/* Logo */}
-        <Typography
-          variant="h3"
-          sx={{
-            color: "#004E64",
-            fontFamily: "Poppins sans-serif",
-            fontWeight: "bold",
-          }}
-        >
-          Swapp
-        </Typography>
-        {/* Navigation items */}
+        <Box component="img" src="/logo.svg" sx={{ height: "90px" }} />
         <Box
           sx={{
             position: "relative",
@@ -73,40 +82,41 @@ const NavBar = () => {
             gap: "24px",
           }}
         >
-          {navItems.map((item) =>
-            item.title === "Log In/ Sign Up" ? (
-              <Button
-                key={item.title}
-                variant="contained"
+          {navItems.map((item) => (
+            <Button
+              key={item.title}
+              variant="outlined"
+              onClick={() => navigate(item.path)}
+            >
+              <Typography
+                variant="body1"
                 sx={{
-                  backgroundColor: "#25A18E",
-                  "&:hover": {
-                    backgroundColor: "#26BBA8",
-                  },
-                  textTransform: "none",
-                  borderRadius: "8px",
-                  padding: "8px 16px",
+                  fontWeight: 700,
                 }}
-                onClick={() => (window.location.href = "/login")}
               >
-                <Typography variant="h6">{item.title}</Typography>
-              </Button>
-            ) : (
-              <Button
-                key={item.title}
-                variant="outlined"
-                onClick={() => (window.location.href = item.path)}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: "normal",
-                  }}
-                >
-                  {item.title}
-                </Typography>
-              </Button>
-            )
+                {item.title}
+              </Typography>
+            </Button>
+          ))}
+          {user ? (
+            <Avatar {...stringAvatar()} />
+          ) : (
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#25A18E",
+                "&:hover": {
+                  backgroundColor: "#26BBA8",
+                },
+                textTransform: "none",
+                borderRadius: "8px",
+                padding: "8px 16px",
+                fontWeight: 900,
+              }}
+              onClick={() => (window.location.href = "/login")}
+            >
+              <Typography variant="h6">Login/SignUp</Typography>
+            </Button>
           )}
         </Box>
       </Box>

@@ -11,6 +11,7 @@ interface MainFeatureStore {
 
   currentPoseIndex: number;
   currentItemIndex: number;
+  currentResultIndex: number;
 
   // Actions for toggling the booleans
   toggleMultiplePoses: () => void;
@@ -42,6 +43,8 @@ interface MainFeatureStore {
   decreaseCurrentPoseIndex: () => void;
   increaseCurrentItemIndex: () => void;
   decreaseCurrentItemIndex: () => void;
+  increateCurrentResultIndex: () => void;
+  decreaseCurrentResultIndex: () => void;
 }
 
 export const useMainFeatureStore = create<MainFeatureStore>((set) => ({
@@ -147,7 +150,7 @@ export const useMainFeatureStore = create<MainFeatureStore>((set) => ({
     set((state) => {
       return {
         generatedResults: [...state.generatedResults, result],
-        currentResultIndex: state.generatedResults.length - 1,
+        currentResultIndex: state.generatedResults.length,
       };
     }),
 
@@ -160,21 +163,28 @@ export const useMainFeatureStore = create<MainFeatureStore>((set) => ({
     set((state) => {
       const newImages = [...state.itemImages];
       newImages.splice(state.currentItemIndex, 1);
-      return { itemImages: newImages };
+      return {
+        itemImages: newImages,
+        currentItemIndex: state.currentItemIndex - 1,
+      };
     }),
 
   deletePrevPoseImage: (index: number) =>
     set((state) => {
       const newImages = [...state.prevPoseImages];
       newImages.splice(index, 1);
-      return { prevPoseImages: newImages };
+      return {
+        prevPoseImages: newImages,
+      };
     }),
 
   deletePrevItemImage: (index: number) =>
     set((state) => {
       const newImages = [...state.prevItemImages];
       newImages.splice(index, 1);
-      return { prevItemImages: newImages };
+      return {
+        prevItemImages: newImages,
+      };
     }),
   // Clear functions
   clearPoseImages: () => set({ poseImages: [], currentPoseIndex: -1 }),
@@ -208,6 +218,21 @@ export const useMainFeatureStore = create<MainFeatureStore>((set) => ({
     set((state) => {
       if (state.currentItemIndex < state.itemImages.length - 1) {
         return { currentItemIndex: state.currentItemIndex + 1 };
+      }
+      return state;
+    }),
+
+  decreaseCurrentResultIndex: () =>
+    set((state) => {
+      if (state.currentResultIndex > 0) {
+        return { currentResultIndex: state.currentResultIndex - 1 };
+      }
+      return state;
+    }),
+  increateCurrentResultIndex: () =>
+    set((state) => {
+      if (state.currentResultIndex < state.generatedResults.length - 1) {
+        return { currentResultIndex: state.currentResultIndex + 1 };
       }
       return state;
     }),
