@@ -13,7 +13,7 @@ export const SwappingPage: React.FC = () => {
 
   return (
     <Box sx={{ position: "relative", boxSizing: "border-box" }}>
-      <HeaderText page="swapping" />
+      <HeaderText />
 
       <Grid container spacing={6}>
         <Grid xs={8} item sx={{ width: "100%" }}>
