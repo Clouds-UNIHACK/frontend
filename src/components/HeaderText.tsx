@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
 
-interface HeaderTextProps {
-  page: string;
-}
+export const HeaderText = () => {
 
-export const HeaderText : React.FC<HeaderTextProps> = ({ page }) => {
+
+
+
   return (
     <Box
       sx={{
@@ -30,9 +30,7 @@ export const HeaderText : React.FC<HeaderTextProps> = ({ page }) => {
             color: "#008eb3", // Light green color
           }}
         >
-          {page}
+          SWAPPING
         </Typography>
       </Box>
     </Box>
-  );
-};
