@@ -35,3 +35,4 @@ export const HeaderText = () => {
       </Box>
     </Box>
     )
+}
